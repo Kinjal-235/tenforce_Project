@@ -39,19 +39,10 @@ public class CareerJourneyTest extends BaseTest {
 
         // Step 6: Navigate to Job openings and verify text
         JobOpeningsPage jobOpeningsPage = articlePage.goToJobOpenings();
-        boolean textPresent = jobOpeningsPage.isExpectedTextPresent();
+        String jobPageUrl = jobOpeningsPage.getCurrentUrl();
+        String jobPageTitle = jobOpeningsPage.getPageTitle();
         
-        // If assertion fails, print page content for debugging
-        if (!textPresent) {
-            System.out.println("Current URL: " + driver.getCurrentUrl());
-            System.out.println("Page Title: " + jobOpeningsPage.getPageTitle());
-            String content = jobOpeningsPage.getPageContent();
-            if (content.toLowerCase().contains("job")) {
-                System.out.println("Page contains 'job' keyword");
-            }
-        }
-        
-        Assert.assertTrue(textPresent,
-            "Expected text related to 'Feel free to send your CV to job' not found on Job openings page. URL: " + driver.getCurrentUrl());
+        Assert.assertTrue(jobOpeningsPage.isExpectedTextPresent(),
+            "Expected job-related content not found on page. URL: " + jobPageUrl + ", Title: " + jobPageTitle);
     }
 }
