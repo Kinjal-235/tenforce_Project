@@ -1,34 +1,23 @@
 package com.tenforce.pages;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 public class HomePage extends BasePage {
-
-    @FindBy(linkText = "Career")
-    private WebElement careerLink;
-
-    @FindBy(partialLinkText = "Career")
-    private WebElement careerLinkPartial;
 
     public HomePage(WebDriver driver) {
         super(driver);
     }
 
     public void open() {
+        log.info("Opening Tenforce homepage");
         driver.get("https://www.tenforce.com/");
-        handleCookieBanner();
+        sleep(3000);
+        log.info("Homepage loaded successfully");
     }
 
     public CareerPage goToCareerPage() {
-        try {
-            scrollToElement(careerLink);
-            clickElement(careerLink);
-        } catch (Exception e) {
-            scrollToElement(careerLinkPartial);
-            clickElement(careerLinkPartial);
-        }
+        log.info("Navigating to Career page");
+        clickLinkByText("career");
         return new CareerPage(driver);
     }
 }

@@ -17,7 +17,7 @@ public class BaseTest {
 
     @BeforeMethod
     public void setUp() {
-        // Suppress WebDriverManager logs
+        // Disables logs from WebDriverManager logs
         System.setProperty("wdm.logLevel", "OFF");
         WebDriverManager.chromedriver().setup();
         
@@ -27,7 +27,7 @@ public class BaseTest {
         options.addArguments("--log-level=3");
         options.addArguments("--silent");
         
-        // Suppress browser logs
+       // Hide all unnecessary browser and driver logs to keep test output clean
         LoggingPreferences logPrefs = new LoggingPreferences();
         logPrefs.enable(LogType.BROWSER, Level.OFF);
         logPrefs.enable(LogType.DRIVER, Level.OFF);

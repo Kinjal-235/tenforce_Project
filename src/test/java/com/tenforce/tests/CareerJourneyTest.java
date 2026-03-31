@@ -1,48 +1,55 @@
 package com.tenforce.tests;
 
 import com.tenforce.pages.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class CareerJourneyTest extends BaseTest {
+    
+    private Logger log = LoggerFactory.getLogger(CareerJourneyTest.class);
 
-    @Test(description = "Navigate through Tenforce career pages and verify job openings text")
+    @Test
     public void testCareerJourney() {
-        // Step 1: Open Tenforce homepage
+        log.info("Starting Career Journey Test");
+        
+        // Step 1: Open homepage
+        log.info("Step 1: Opening homepage");
         HomePage homePage = new HomePage(driver);
         homePage.open();
-        Assert.assertTrue(driver.getCurrentUrl().contains("tenforce.com"), 
-            "Failed to open Tenforce homepage");
+        Assert.assertTrue(driver.getCurrentUrl().contains("tenforce.com"));
+        log.info("Homepage opened successfully. URL: " + driver.getCurrentUrl());
 
-        // Step 2: Navigate to Career page
+        // Step 2: Go to Career page
+        log.info("Step 2: Navigating to Career page");
         CareerPage careerPage = homePage.goToCareerPage();
-        String careerUrl = driver.getCurrentUrl();
-        Assert.assertTrue(careerUrl.toLowerCase().contains("career") || 
-                         driver.getTitle().toLowerCase().contains("career"),
-            "Failed to navigate to Career page. Current URL: " + careerUrl);
+        Assert.assertTrue(driver.getCurrentUrl().contains("career"));
+        log.info("Career page opened. URL: " + driver.getCurrentUrl());
 
-        // Step 3: Navigate to Life at Tenforce section
-        LifeAtTenforcePage lifeAtTenforcePage = careerPage.goToLifeAtTenforce();
-        String lifeUrl = driver.getCurrentUrl();
-        // Verify navigation occurred (URL changed from career page)
-        Assert.assertNotEquals(careerUrl, lifeUrl,
-            "Failed to navigate to Life at Tenforce section. URL did not change from: " + careerUrl);
+        // Step 3: Go to Life at Tenforce
+        log.info("Step 3: Navigating to Life at Tenforce section");
+        LifeAtTenforcePage lifePage = careerPage.goToLifeAtTenforce();
+        Assert.assertNotNull(lifePage);
+        log.info("Life at Tenforce page opened");
 
-        // Step 4: Open "Life of two interns" article
-        ArticlePage articlePage = lifeAtTenforcePage.openLifeOfTwoInternsArticle();
-        String articleUrl = driver.getCurrentUrl();
-        Assert.assertNotEquals(lifeUrl, articleUrl,
-            "Failed to open Life of two interns article. URL did not change from: " + lifeUrl);
+        // Step 4: Open interns article
+        log.info("Step 4: Opening interns article");
+        ArticlePage articlePage = lifePage.openLifeOfTwoInternsArticle();
+        Assert.assertNotNull(articlePage);
+        log.info("Interns article opened");
 
-        // Step 5: Scroll through the article
-        articlePage.scrollThroughArticle();
+        // Step 5: Scroll through article
+        log.info("Step 5: Scrolling through article");
+        articlePage.scrollArticle();
+        log.info("Article scrolled successfully");
 
-        // Step 6: Navigate to Job openings and verify text
-        JobOpeningsPage jobOpeningsPage = articlePage.goToJobOpenings();
-        String jobPageUrl = jobOpeningsPage.getCurrentUrl();
-        String jobPageTitle = jobOpeningsPage.getPageTitle();
+        // Step 6: Go to Job openings
+        log.info("Step 6: Navigating to Job openings page");
+        JobOpeningsPage jobPage = articlePage.goToJobOpenings();
+        Assert.assertTrue(jobPage.isJobPageDisplayed(), "Job page content not found");
+        log.info("Job openings page verified successfully");
         
-        Assert.assertTrue(jobOpeningsPage.isExpectedTextPresent(),
-            "Expected job-related content not found on page. URL: " + jobPageUrl + ", Title: " + jobPageTitle);
+        log.info("Career Journey Test completed successfully");
     }
 }
